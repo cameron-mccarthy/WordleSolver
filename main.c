@@ -4,12 +4,12 @@
 #include <string.h>
 //current logic problem = yellow and gray or green
 //yellow case is broken
-struct WordList{
+typedef struct WordList{
 	char** words;
 	int size;
-};
+} WordList;
 
-struct WordList compare(char *input, char *result, struct WordList words);
+WordList compare(char *input, char *result, WordList words);
 bool test(char* input, char* result, char* word);
 bool mCase(char letter, int position, char* word);
 bool nCase(char letter, int position, char* word);
@@ -19,12 +19,12 @@ int main(){
 	FILE *file;
 	const int WORDLE = 2309;
 	const int ROUNDS = 6;
-	struct WordList words;
+	WordList words;
 	
 	words.words = (char**)malloc(WORDLE * sizeof(char*));
 	words.size = WORDLE;
 	if (words.words == NULL){
-		printf("memory not allocated", words);
+		printf("memory not allocated");
 		return 1;
 	}
 	char *input = (char*)malloc(6*sizeof(char));
@@ -45,15 +45,17 @@ int main(){
 	
 	file = fopen("wordle.txt", "r");
 	for(int i = 0; i< WORDLE; i++) {
-		words.words[i] = (char*)malloc(7*sizeof(char));
+		words.words[i] = (char*)malloc(6*sizeof(char));
 		if (words.words[i]== NULL){
 			printf("memory not allocated");
 			return 1;
 		}
-		fgets(buffer, 7, file);
-		buffer[strcspn(buffer, "\n")] = '\0';
-		strncpy(words.words[i], buffer, 5);
+		fgets(buffer, 6, file);
+		printf("buffer at %d = %s \n", i, buffer);
+		buffer[5] = '\0';
+		strncpy(words.words[i], buffer, 6);
 		words.words[i][5] = '\0';
+		//printf("word at %d = %s \n", i, words.words[i]);
 	}
 	fclose(file);
 	
@@ -71,10 +73,9 @@ int main(){
 		strncpy(result, buffer, 5);
 		result[5] = '\0';
 		
-		words = compare(input, result, words);
+		//words = compare(input, result, words);
 	}
 
-	
 	free(buffer);
 	free(words.words);
 	free(input);
@@ -85,16 +86,17 @@ int main(){
 
 
 //finds all possible words
-struct WordList compare(char *input, char *result, struct WordList words){
+WordList compare(char *input, char *result, WordList words){
 	printf("\ncompare\n");
 	printf("input is %s\nresult is %s\nPossible words are:", input, result);
 	int wIndex = 0;
 	int pIndex = 0;
-	struct WordList possible;
+	WordList possible;
 	possible.words = (char**)malloc(words.size * sizeof(char*)); 
 	while(wIndex < words.size){
 		
-		if (test(input, result, words.words[wIndex])){
+		//if (test(input, result, words.words[wIndex])){
+		if(true){
 			possible.words[pIndex] = (char*)malloc(6*sizeof(char));
 			if (possible.words[pIndex]== NULL){
 				printf("memory not allocated");
