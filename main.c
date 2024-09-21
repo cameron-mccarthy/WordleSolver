@@ -18,7 +18,7 @@ bool nCase(char letter, int position, char* word);
 int main(){
 	FILE *file;
 	const int WORDLE = 2309;
-	const int ROUNDS = 6;
+	const int ROUNDS = 1;
 	WordList words;
 	
 	words.words = (char**)malloc(WORDLE * sizeof(char*));
@@ -37,7 +37,7 @@ int main(){
 		printf("memory not allocated");
 		return 1;
 	}
-	char *buffer = (char*)malloc(7 *sizeof(char));
+	char *buffer = (char*)malloc(8 *sizeof(char));
 	if (buffer == NULL){
 		printf("memory not allocated");
 		return 1;
@@ -50,32 +50,26 @@ int main(){
 			printf("memory not allocated");
 			return 1;
 		}
-		fgets(buffer, 6, file);
-		printf("buffer at %d = %s \n", i, buffer);
-		buffer[5] = '\0';
-		strncpy(words.words[i], buffer, 6);
-		words.words[i][5] = '\0';
-		//printf("word at %d = %s \n", i, words.words[i]);
+		fgets(buffer, 8, file);
+		strncpy(words.words[i], buffer, 5);	
 	}
 	fclose(file);
 	
 	printf("Hello, I am WALSI, Your Wordle Algorithmic Logic Solver Interface.\n");
 	for(int i = 0; i < ROUNDS; i ++){
 		printf("\nEnter a five letter word: ");
-		fgets(buffer, 7, stdin);
-		buffer[strcspn(buffer, "\n")] = '\0';
+		fgets(buffer, 8, stdin);
 		strncpy(input, buffer, 5);
 		input[5] = '\0';
 		
 		printf("Active Wordle Results [Y, N, M]: ");
-		fgets(buffer, 7, stdin);
-		buffer[strcspn(buffer, "\n")] = '\0';
+		fgets(buffer, 8, stdin);
 		strncpy(result, buffer, 5);
 		result[5] = '\0';
 		
-		//words = compare(input, result, words);
+		words = compare(input, result, words);
 	}
-
+	
 	free(buffer);
 	free(words.words);
 	free(input);
@@ -87,7 +81,6 @@ int main(){
 
 //finds all possible words
 WordList compare(char *input, char *result, WordList words){
-	printf("\ncompare\n");
 	printf("input is %s\nresult is %s\nPossible words are:", input, result);
 	int wIndex = 0;
 	int pIndex = 0;
@@ -95,8 +88,7 @@ WordList compare(char *input, char *result, WordList words){
 	possible.words = (char**)malloc(words.size * sizeof(char*)); 
 	while(wIndex < words.size){
 		
-		//if (test(input, result, words.words[wIndex])){
-		if(true){
+		if (test(input, result, words.words[wIndex])){
 			possible.words[pIndex] = (char*)malloc(6*sizeof(char));
 			if (possible.words[pIndex]== NULL){
 				printf("memory not allocated");
@@ -123,6 +115,7 @@ bool test(char* input, char* result, char* word){
 					return false;
 				}
 				break;
+				/*
 			case 'N':
 				if (strchr(word, input[i])&& !nCase(input[i], i, word)) {
 					return false;
@@ -137,6 +130,7 @@ bool test(char* input, char* result, char* word){
 				//printf("invalid result");
 				return false;
 				break;
+				*/
 		}
 	}
 	return true;
