@@ -12,7 +12,7 @@ typedef struct WordList{
 WordList compare(char *input, char *result, WordList words);
 bool test(char* input, char* result, char* word);
 bool mCase(char letter, int position, char* word);
-bool nCase(char letter, int position, char* word);
+bool nCase(char letter, int position, char* word, char* result);
 
 // WALSI - Wordle Algorithmic Logic Solver Interface
 int main(){
@@ -115,12 +115,13 @@ bool test(char* input, char* result, char* word){
 					return false;
 				}
 				break;
-				/*
+				
 			case 'N':
-				if (strchr(word, input[i])&& !nCase(input[i], i, word)) {
+				if (!nCase(input[i], i, word, result)) {
 					return false;
 				}
 				break;
+				/*
 			case 'M':
 				if (!mCase(input[i], i, word)){
 					return false;
@@ -160,10 +161,10 @@ bool mCase(char letter, int position, char* word){
 	return false;
 }
 
-bool nCase(char letter, int position, char* word){
-	for (int i = position +1 ; i < 5; i++){
-		if (word[i] == letter){
-			//return here, and it mights still be possible
+bool nCase(char letter, int position, char* word, char* result){
+	for (int i = 0 ; i < position; i++){
+		if (word[i] == letter && ){
+			//return here, and the word might still be possible
 			return true;
 		}
 	}
