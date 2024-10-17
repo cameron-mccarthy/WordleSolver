@@ -13,7 +13,7 @@ WordList compare(char *input, char *result, WordList words);
 bool test(char* input, char* result, char* word);
 bool mCase(char letter, int position, char* word);
 bool nCase(char letter, int position, char* word, char* result);
-
+bool checkfor2(char letter, char* word);
 // WALSI - Wordle Algorithmic Logic Solver Interface
 int main(){
 	FILE *file;
@@ -161,13 +161,23 @@ bool mCase(char letter, int position, char* word){
 	return false;
 }
 
+//return true if word is still possible
+//return false if word is not possible
 bool nCase(char letter, int position, char* word, char* result){
-	for (int i = 0 ; i < position; i++){
-		if (word[i] == letter && ){
-			//return here, and the word might still be possible
-			return true;
-		}
+	if (checkfor2(letter, word)){
+		return false;
 	}
-	//return here, word is not an option
-	return false;
+	//assuming one letter
+	return false if letter is in word at all
+}
+
+bool checkfor2(char letter, char* word){
+	int count = 0;
+	for(int i = 0; i < 5; i++){
+		if (word[i] == letter)
+			count++;
+	}
+	if (count > 2)
+		printf("three encountered at %s", word);
+	return(count==2);
 }
