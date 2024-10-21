@@ -14,6 +14,7 @@ bool test(char* input, char* result, char* word);
 bool mCase(char letter, int position, char* word);
 bool nCase(char letter, int position, char* word, char* result);
 bool checkfor2(char letter, char* word);
+bool contains(char letter, char* word);
 // WALSI - Wordle Algorithmic Logic Solver Interface
 int main(){
 	FILE *file;
@@ -81,13 +82,11 @@ int main(){
 
 //finds all possible words
 WordList compare(char *input, char *result, WordList words){
-	printf("input is %s\nresult is %s\nPossible words are:", input, result);
 	int wIndex = 0;
 	int pIndex = 0;
 	WordList possible;
 	possible.words = (char**)malloc(words.size * sizeof(char*)); 
 	while(wIndex < words.size){
-		
 		if (test(input, result, words.words[wIndex])){
 			possible.words[pIndex] = (char*)malloc(6*sizeof(char));
 			if (possible.words[pIndex]== NULL){
@@ -95,7 +94,7 @@ WordList compare(char *input, char *result, WordList words){
 				return possible;
 			}
 			possible.words[pIndex] = words.words[wIndex];
-			printf("\n%s", possible.words[pIndex]);
+			printf("word possible: \n%s", possible.words[pIndex]);
 			pIndex++;
 		}
 
@@ -126,12 +125,12 @@ bool test(char* input, char* result, char* word){
 				if (!mCase(input[i], i, word)){
 					return false;
 				}
-				break;
+				break;*/
 			default:
-				//printf("invalid result");
+				printf("invalid result");
 				return false;
 				break;
-				*/
+				
 		}
 	}
 	return true;
@@ -168,7 +167,9 @@ bool nCase(char letter, int position, char* word, char* result){
 		return false;
 	}
 	//assuming one letter
-	return false if letter is in word at all
+	
+	return(!contains(letter, word));
+
 }
 
 bool checkfor2(char letter, char* word){
@@ -180,4 +181,13 @@ bool checkfor2(char letter, char* word){
 	if (count > 2)
 		printf("three encountered at %s", word);
 	return(count==2);
+}
+
+bool contains(char letter, char* word){
+	for (int i = 0; i < 5; i++){
+		if (word[i] == letter){
+			return true;
+		}
+			
+	}
 }
