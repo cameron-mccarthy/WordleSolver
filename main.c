@@ -11,9 +11,9 @@ typedef struct WordList{
 
 WordList compare(char *input, char *result, WordList words);
 bool test(char* input, char* result, char* word);
-bool mCase(char letter, int position, char* word);
+bool mCase(char letter, int position, char* word, char* result);
 bool nCase(char letter, int position, char* word, char* result);
-bool checkfor2(char letter, char* word);
+bool count(char letter, char* word);
 bool contains(char letter, char* word);
 // WALSI - Wordle Algorithmic Logic Solver Interface
 int main(){
@@ -120,12 +120,12 @@ bool test(char* input, char* result, char* word){
 					return false;
 				}
 				break;
-				/*
+				
 			case 'M':
-				if (!mCase(input[i], i, word)){
+				if (!mCase(input[i], i, word, result)){
 					return false;
 				}
-				break;*/
+				break;
 			default:
 				printf("invalid result");
 				return false;
@@ -137,11 +137,21 @@ bool test(char* input, char* result, char* word){
 }
 
 //word needs to contain letter not at position.
-bool mCase(char letter, int position, char* word){
+bool mCase(char letter, int position, char* word, char* result){
+	/*
 	if (checkfor2(letter, word)){
-		printf("fax");
+		for(int i = 0; i < 5; i ++){
+			if( i< position && word[i] == letter && word[position] != letter){
+				//dup letter came before. return true if word contains 2 letters not at i
+				return true;
+			}
+			else if ( i > position && word[i] == letter && result[i] != 'N'){
+				return true;
+			}
+		}
+		return false;
 	}
-
+	*/
 	//assuming one instance
 	return (contains(letter, word) && word[position] != letter); 
 }
@@ -149,30 +159,25 @@ bool mCase(char letter, int position, char* word){
 //return true if word is still possible
 //return false if word is not possible
 bool nCase(char letter, int position, char* word, char* result){
-	if (checkfor2(letter, word)){
-		bool check = false;
-		for (int i = 0; i < 5; i++){
-			if (i != position && (result[i] == 'Y' || result[i] == 'M')){
-				check = true;
-				break;
-			}
+	int count = count()
+	for (int i = 0; i < 5; i++){
+		if (i != position && word[i] == letter && (result[i] == 'Y' || result[i] == 'M')){
+			return(!checkfor2(letter, word));
 		}
-		return check;
 	}
+	
 	//assuming one letter
 	return(!contains(letter, word));
 
 }
 
-bool checkfor2(char letter, char* word){
+bool count(char letter, char* word){
 	int count = 0;
 	for(int i = 0; i < 5; i++){
 		if (word[i] == letter)
 			count++;
 	}
-	if (count > 2)
-		printf("three encountered at %s", word);
-	return(count==2);
+	return count;
 }
 
 bool contains(char letter, char* word){
