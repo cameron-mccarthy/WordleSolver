@@ -116,7 +116,7 @@ bool test(char* input, char* result, char* word){
 				break;
 				
 			case 'N':
-				if (!nCase(input[i], i, word, result)) {
+				if (!nCase(input[i], i, word, input, result)) {
 					return false;
 				}
 				break;
@@ -159,15 +159,22 @@ bool mCase(char letter, int position, char* word, char* result){
 //return true if word is still possible
 //return false if word is not possible
 bool nCase(char letter, int position, char* test, char* input, char* result){
-	int count = count(letter, word);
-	for (int i = 0; i < 5; i++){
-		if (i != position && word[i] == letter && (result[i] == 'Y' || result[i] == 'M')){
-			return(!checkfor2(letter, word));
+	int amount = count(letter, input);
+	if (amount > 1){
+		int null = 0;
+		for (int i = 0; i < 5; i++){
+			if(input[i] == letter && result[i]=='N'){
+				null++;
+			}
 		}
+		//mystery word has 'actual' number of leters.
+		//amount in guess - amount in mystery = null
+		//null will always be at least one. 
+		return (count(letter, test) == amount-null && test[position] != letter);   
 	}
 	
 	//assuming one letter
-	return(!contains(letter, word));
+	return(!contains(letter, test));
 
 }
 
