@@ -94,7 +94,7 @@ WordList compare(char *input, char *result, WordList words){
 				return possible;
 			}
 			possible.words[pIndex] = words.words[wIndex];
-			printf("word possible: \n%s", possible.words[pIndex]);
+			printf("word possible: %s\n", possible.words[pIndex]);
 			pIndex++;
 		}
 
@@ -138,36 +138,28 @@ bool test(char* input, char* result, char* word){
 
 //word needs to contain letter not at position.
 bool mCase(char letter, int position, char* word){
-	int count = 0;
-	int compare = 0;
-	bool check;
-	for(int i = 0; i < 5; i++){
-		if (word[i] == letter){
-			count ++;
-		}
+	if (checkfor2(letter, word)){
+		printf("fax");
 	}
-		for(int i = 0; i < 5; i++){
-			if (word[i] == letter && i != position){
-				if (i != position){
-					check = true;
-				}
-				compare ++;
-			}
-		}
-	if (check && count == compare){
-		return true;
-	}
-	return false;
+
+	//assuming one instance
+	return (contains(letter, word) && word[position] != letter); 
 }
 
 //return true if word is still possible
 //return false if word is not possible
 bool nCase(char letter, int position, char* word, char* result){
 	if (checkfor2(letter, word)){
-		return false;
+		bool check = false;
+		for (int i = 0; i < 5; i++){
+			if (i != position && (result[i] == 'Y' || result[i] == 'M')){
+				check = true;
+				break;
+			}
+		}
+		return check;
 	}
 	//assuming one letter
-	
 	return(!contains(letter, word));
 
 }
@@ -187,7 +179,7 @@ bool contains(char letter, char* word){
 	for (int i = 0; i < 5; i++){
 		if (word[i] == letter){
 			return true;
-		}
-			
+		}		
 	}
+	return false;
 }
