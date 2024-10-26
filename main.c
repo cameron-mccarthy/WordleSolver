@@ -11,15 +11,15 @@ typedef struct WordList{
 
 WordList compare(char *input, char *result, WordList words);
 bool test(char* input, char* result, char* word);
-bool mCase(char letter, int position, char* word, char* result);
+bool mCase(char letter, int position, char* test, char* input, char* result);
 bool nCase(char letter, int position, char* test, char* input, char* result);
-bool count(char letter, char* word);
+int count(char letter, char* word);
 bool contains(char letter, char* word);
 // WALSI - Wordle Algorithmic Logic Solver Interface
 int main(){
 	FILE *file;
 	const int WORDLE = 2309;
-	const int ROUNDS = 1;
+	const int ROUNDS = 5;
 	WordList words;
 	
 	words.words = (char**)malloc(WORDLE * sizeof(char*));
@@ -69,6 +69,8 @@ int main(){
 		result[5] = '\0';
 		
 		words = compare(input, result, words);
+		if (words.size < 2)
+			break;
 	}
 	
 	free(buffer);
@@ -122,7 +124,7 @@ bool test(char* input, char* result, char* word){
 				break;
 				
 			case 'M':
-				if (!mCase(input[i], i, word, result)){
+				if (!mCase(input[i], i, word, input, result)){
 					return false;
 				}
 				break;
@@ -137,23 +139,19 @@ bool test(char* input, char* result, char* word){
 }
 
 //word needs to contain letter not at position.
-bool mCase(char letter, int position, char* word, char* result){
-	/*
-	if (checkfor2(letter, word)){
-		for(int i = 0; i < 5; i ++){
-			if( i< position && word[i] == letter && word[position] != letter){
-				//dup letter came before. return true if word contains 2 letters not at i
-				return true;
-			}
-			else if ( i > position && word[i] == letter && result[i] != 'N'){
-				return true;
+bool mCase(char letter, int position, char* test, char* input, char* result){
+	int amount = count(letter, input);
+	if (amount > 1){
+		int actual = 0;
+		for (int i = 0; i < 5; i++){
+			if(input[i] == letter && result[i]!='N'){
+				actual++;
 			}
 		}
-		return false;
+		return (count(letter, test) >= actual && test[position] != letter);   
 	}
-	*/
 	//assuming one instance
-	return (contains(letter, word) && word[position] != letter); 
+	return (contains(letter, test) && test[position] != letter); 
 }
 
 //return true if word is still possible
@@ -178,7 +176,7 @@ bool nCase(char letter, int position, char* test, char* input, char* result){
 
 }
 
-bool count(char letter, char* word){
+int count(char letter, char* word){
 	int count = 0;
 	for(int i = 0; i < 5; i++){
 		if (word[i] == letter)
