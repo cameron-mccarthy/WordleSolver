@@ -22,23 +22,23 @@ int main(){
 	const int ROUNDS = 5;
 	WordList words;
 	
-	words.words = (char**)malloc(WORDLE * sizeof(char*));
+	words.words = malloc(WORDLE * sizeof(char*));
 	words.size = WORDLE;
 	if (words.words == NULL){
 		printf("memory not allocated");
 		return 1;
 	}
-	char *input = (char*)malloc(6*sizeof(char));
+	char *input = malloc(6*sizeof(char));
 	if (input == NULL){
 		printf("memory not allocated");
 		return 1;
 	}
-	char *result = (char*)malloc(6*sizeof(char));
+	char *result = malloc(6*sizeof(char));
 	if (result == NULL){
 		printf("memory not allocated");
 		return 1;
 	}
-	char *buffer = (char*)malloc(8 *sizeof(char));
+	char *buffer = malloc(8 *sizeof(char));
 	if (buffer == NULL){
 		printf("memory not allocated");
 		return 1;
@@ -46,7 +46,7 @@ int main(){
 	
 	file = fopen("wordle.txt", "r");
 	for(int i = 0; i< WORDLE; i++) {
-		words.words[i] = (char*)malloc(6*sizeof(char));
+		words.words[i] = malloc(6*sizeof(char));
 		if (words.words[i]== NULL){
 			printf("memory not allocated");
 			return 1;
@@ -87,10 +87,10 @@ WordList compare(char *input, char *result, WordList words){
 	int wIndex = 0;
 	int pIndex = 0;
 	WordList possible;
-	possible.words = (char**)malloc(words.size * sizeof(char*)); 
+	possible.words = malloc(words.size * sizeof(char*)); 
 	while(wIndex < words.size){
 		if (test(input, result, words.words[wIndex])){
-			possible.words[pIndex] = (char*)malloc(6*sizeof(char));
+			possible.words[pIndex] = malloc(6*sizeof(char));
 			if (possible.words[pIndex]== NULL){
 				printf("memory not allocated");
 				return possible;
