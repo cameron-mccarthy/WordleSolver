@@ -2,19 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-//current logic problem = yellow and gray or green
-//yellow case is broken
-typedef struct WordList{
-	char** words;
-	int size;
-} WordList;
+#include "header.h"
 
-WordList compare(char *input, char *result, WordList words);
-bool test(char* input, char* result, char* word);
-bool mCase(char letter, int position, char* test, char* input, char* result);
-bool nCase(char letter, int position, char* test, char* input, char* result);
-int count(char letter, char* word);
-bool contains(char letter, char* word);
 // WALSI - Wordle Algorithmic Logic Solver Interface
 int main(){
 	FILE *file;
@@ -24,28 +13,17 @@ int main(){
 	
 	words.words = malloc(WORDLE * sizeof(char*));
 	words.size = WORDLE;
-	if (words.words == NULL){
-		printf("memory not allocated");
-		return 1;
-	}
 	char *input = malloc(6*sizeof(char));
-	if (input == NULL){
-		printf("memory not allocated");
-		return 1;
-	}
 	char *result = malloc(6*sizeof(char));
-	if (result == NULL){
-		printf("memory not allocated");
-		return 1;
-	}
 	char *buffer = malloc(8 *sizeof(char));
-	if (buffer == NULL){
+
+	if (buffer == NULL || words.words == NULL || input == NULL || result == NULL){
 		printf("memory not allocated");
 		return 1;
 	}
 	
 	file = fopen("wordle.txt", "r");
-	for(int i = 0; i< WORDLE; i++) {
+	for(int i = 0; i < WORDLE; i++) {
 		words.words[i] = malloc(6*sizeof(char));
 		if (words.words[i]== NULL){
 			printf("memory not allocated");
