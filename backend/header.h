@@ -9,3 +9,4 @@ bool mCase(char letter, int position, char* test, char* input, char* result);
 bool nCase(char letter, int position, char* test, char* input, char* result);
 int count(char letter, char* word);
 bool contains(char letter, char* word);
+WordList simulate(WordList all, WordList possible);

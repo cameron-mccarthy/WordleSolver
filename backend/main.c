@@ -10,7 +10,8 @@ int main(){
 	const int WORDLE = 2309;
 	const int ROUNDS = 5;
 	WordList words;
-	
+	WordList all;
+
 	words.words = malloc(WORDLE * sizeof(char*));
 	words.size = WORDLE;
 	char *input = malloc(6*sizeof(char));
@@ -34,6 +35,7 @@ int main(){
 	}
 	fclose(file);
 	
+	WordList currentwords;
 	printf("Hello, I am WALSI, Your Wordle Algorithmic Logic Solver Interface.\n");
 	for(int i = 0; i < ROUNDS; i ++){
 		printf("\nEnter a five letter word: ");
@@ -46,7 +48,8 @@ int main(){
 		strncpy(result, buffer, 5);
 		result[5] = '\0';
 		
-		words = compare(input, result, words);
+		currentwords = compare(input, result, words);
+		printf("Curr = %d, words = %d", currentwords.size, words.size);
 		if (words.size < 2)
 			break;
 	}
@@ -170,4 +173,21 @@ bool contains(char letter, char* word){
 		}		
 	}
 	return false;
+}
+
+char* generate(char* answer, char* input){
+	char* result = malloc(6*sizeof(char)); 
+	if (result == NULL){
+			printf("memory not allocated");
+			return NULL;
+		}
+	for (int i = 0; i < 5; i ++){
+		
+	}
+}
+
+WordList simulate(WordList all, WordList possible){
+	for (int i = 0; i < all.size; i++){
+		
+	}
 }
