@@ -35,6 +35,8 @@ int main(){
 	}
 	fclose(file);
 	
+	printf("%s\n", generate("class", "sssss"));
+
 	WordList currentwords;
 	printf("Hello, I am WALSI, Your Wordle Algorithmic Logic Solver Interface.\n");
 	for(int i = 0; i < ROUNDS; i ++){
@@ -60,7 +62,6 @@ int main(){
 	free(result);
     return 0;
 }
-
 
 
 //finds all possible words
@@ -146,7 +147,7 @@ bool nCase(char letter, int position, char* test, char* input, char* result){
 				null++;
 			}
 		}
-		//mystery word has 'actual' number of leters.
+		//mystery word has 'actual' number of letters.
 		//amount in guess - amount in mystery = null
 		//null will always be at least one. 
 		return (count(letter, test) == amount-null && test[position] != letter);   
@@ -157,6 +158,7 @@ bool nCase(char letter, int position, char* test, char* input, char* result){
 
 }
 
+//counts occurances of a single letter in a word
 int count(char letter, char* word){
 	int count = 0;
 	for(int i = 0; i < 5; i++){
@@ -166,6 +168,7 @@ int count(char letter, char* word){
 	return count;
 }
 
+//sees if a word contains a letter
 bool contains(char letter, char* word){
 	for (int i = 0; i < 5; i++){
 		if (word[i] == letter){
@@ -175,15 +178,48 @@ bool contains(char letter, char* word){
 	return false;
 }
 
+//takes an input and generates the wordle colors based on the correct answer
 char* generate(char* answer, char* input){
 	char* result = malloc(6*sizeof(char)); 
 	if (result == NULL){
 			printf("memory not allocated");
 			return NULL;
 		}
+	result[5] = '\0';
 	for (int i = 0; i < 5; i ++){
-		
+		if (answer[i] == input[i]){
+			result[i] = 'Y';
+		}
+		//DOES NOT ACCOUNT FOR GREEN AFTER YELLOW OF SAME LETTER
+		else if (contains(input[i], answer)){
+			//check which occurance of the letter we are at, and where the last one was
+			int occurance = 1;
+			int index = i;
+			for (int j = 0; j < i; j++){
+				if (input[i] == input[j]){
+					occurance++;
+					index == j;
+				}
+			}
+			amount_in_answer = count(input[i], answer)
+			if (occurance > amount_in_answer)
+				result[i] = 'N';
+			else {
+				result[i] = 'M';
+				for (int j = i + 1; j < 5; j ++){
+					if(input[i] == input[j] && input[j] == answer[j]){
+						//this will be a future green, handle accordingly
+						//also make sure that multiple yellows in the front can handle single and multiple greens behind
+					}
+				}
+				
+			}
+		}
+		else{
+			result[i] = 'N';
+		}
 	}
+	return result;
 }
 
 WordList simulate(WordList all, WordList possible){
