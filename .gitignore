@@ -10,7 +10,8 @@
 
 # production
 /build
-/backend/a.out
+/backend/libwordle.a
+/backend/wordle.o
 /todo.txt
 
 # misc

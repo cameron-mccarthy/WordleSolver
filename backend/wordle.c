@@ -5,38 +5,20 @@
 #include "header.h"
 
 // WALSI - Wordle Algorithmic Logic Solver Interface
-int main(){
-	FILE *file;
-	const int WORDLE = 2309;
+int rounds(){
+	
 	const int ROUNDS = 5;
-	WordList words;
-	WordList all;
-
-	words.words = malloc(WORDLE * sizeof(char*));
-	words.size = WORDLE;
+	
 	char *input = malloc(6*sizeof(char));
 	char *result = malloc(6*sizeof(char));
-	char *buffer = malloc(8 *sizeof(char));
+	char *buffer = malloc(8*sizeof(char));
+	WordList words = *build();
 
-	if (buffer == NULL || words.words == NULL || input == NULL || result == NULL){
+	if (input == NULL || result == NULL || buffer == NULL || words.words == NULL){
 		printf("memory not allocated");
 		return 1;
 	}
 	
-	file = fopen("wordle.txt", "r");
-	for(int i = 0; i < WORDLE; i++) {
-		words.words[i] = malloc(6*sizeof(char));
-		if (words.words[i]== NULL){
-			printf("memory not allocated");
-			return 1;
-		}
-		fgets(buffer, 8, file);
-		strncpy(words.words[i], buffer, 5);	
-	}
-	fclose(file);
-	
-	printf("%s\n", generate("class", "sssss"));
-
 	WordList currentwords;
 	printf("Hello, I am WALSI, Your Wordle Algorithmic Logic Solver Interface.\n");
 	for(int i = 0; i < ROUNDS; i ++){
@@ -50,19 +32,46 @@ int main(){
 		strncpy(result, buffer, 5);
 		result[5] = '\0';
 		
+		//This is currently not right, 
 		currentwords = compare(input, result, words);
 		printf("Curr = %d, words = %d", currentwords.size, words.size);
 		if (words.size < 2)
 			break;
 	}
 	
-	free(buffer);
 	free(words.words);
 	free(input);
 	free(result);
+	free(buffer);
     return 0;
 }
 
+WordList* build(){
+	FILE *file;
+	WordList* words = malloc(sizeof(WordList));
+	words->words = malloc(WORDLE * sizeof(char*));
+	words->size = WORDLE;
+	char *buffer = malloc(8 *sizeof(char));
+
+	if (buffer == NULL || words->words == NULL){
+		printf("memory not allocated");
+		return NULL;
+	}
+
+	file = fopen("wordle.txt", "r");
+	for(int i = 0; i < WORDLE; i++) {
+		words->words[i] = malloc(6*sizeof(char));
+		if (words->words[i] == NULL){
+			printf("memory not allocated");
+			return NULL;
+		}
+		fgets(buffer, 8, file);
+		strncpy(words->words[i], buffer, 5);	
+	}
+	fclose(file);
+	free(buffer);
+	return words;
+}
 
 //finds all possible words
 WordList compare(char *input, char *result, WordList words){
@@ -189,8 +198,14 @@ char* generate(char* answer, char* input){
 	for (int i = 0; i < 5; i ++){
 		if (answer[i] == input[i]){
 			result[i] = 'Y';
+			//this section overrides previous 'M' if there is a green letter match
+			for (int j = 0; j < i; j++){
+				if (input[i] == input[j] && result[j] == 'M'){
+					result[j] = 'N';
+					break;
+				}
+			}
 		}
-		//DOES NOT ACCOUNT FOR GREEN AFTER YELLOW OF SAME LETTER
 		else if (contains(input[i], answer)){
 			//check which occurance of the letter we are at, and where the last one was
 			int occurance = 1;
@@ -201,29 +216,11 @@ char* generate(char* answer, char* input){
 					index == j;
 				}
 			}
-			amount_in_answer = count(input[i], answer)
-			if (occurance > amount_in_answer)
-				result[i] = 'N';
-			else {
-				result[i] = 'M';
-				for (int j = i + 1; j < 5; j ++){
-					if(input[i] == input[j] && input[j] == answer[j]){
-						//this will be a future green, handle accordingly
-						//also make sure that multiple yellows in the front can handle single and multiple greens behind
-					}
-				}
-				
-			}
+			result[i] = (occurance > count(input[i], answer)) ? 'N' : 'M';
 		}
 		else{
 			result[i] = 'N';
 		}
 	}
 	return result;
-}
-
-WordList simulate(WordList all, WordList possible){
-	for (int i = 0; i < all.size; i++){
-		
-	}
 }
